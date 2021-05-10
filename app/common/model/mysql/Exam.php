@@ -35,33 +35,38 @@ class Exam extends Model{
             return 0;
         }
     }
-    public function updateExam($examid,$score){
+    public function updateExam($examid,$erroroptnum,$totaltime){
         $examid = intval($examid);
-        $score = intval($score);
-        if(empty($examid) || empty($score)){
+        if(empty($examid)){
             return false;
         }
         $where = [
             "id" => $examid,
         ];
-        $stime = $this -> where($where) -> find() -> stime;
-        // dump($stime);
-        $time = time() - $stime;
-        if($score > 60){
-            $data = [
-                "etime" => time(),
-                "time" => $time,
-                "score" => $score,
-                "pass" => 1
-            ];
-        } else{
-            $data = [
-                "etime" => time(),
-                "time" => $time,
-                "score" => $score,
-                "pass" => 0
-            ];
-        }
+        // $stime = $this -> where($where) -> find() -> stime;
+        // // dump($stime);
+        // $time = time() - $stime;
+        // if($score > 60){
+        //     $data = [
+        //         "etime" => time(),
+        //         "time" => $time,
+        //         "score" => $score,
+        //         "pass" => 1
+        //     ];
+        // } else{
+        //     $data = [
+        //         "etime" => time(),
+        //         "time" => $time,
+        //         "score" => $score,
+        //         "pass" => 0
+        //     ];
+        // }
+        $data = [
+            "etime" => time(),
+            "time" => $totaltime,
+            "erroroptnum" => $erroroptnum,
+            "pass" => 1
+        ];
         return $this -> where($where) -> save($data);
     }
     public function queryExam($examid){
@@ -89,5 +94,16 @@ class Exam extends Model{
         ];
         $eproObj = $this -> epro() -> where($where) -> select();
         return $eproObj;
+    }
+    public function queryExams($examid){
+        $examid = intval($examid);
+        if(empty($examid)){
+            return false;
+        }
+        $where = [
+            "userid" => $examid,
+        ];
+        $examObj = $this -> where($where) -> select();
+        return $examObj;
     }
 }

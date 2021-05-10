@@ -64,4 +64,15 @@ class Train extends Model{
         $processObj = $this -> process() -> where($where) -> select();
         return $processObj;
     }
+    public function queryTrains($trainid){
+        $trainid = intval($trainid);
+        if(empty($trainid)){
+            return false;
+        }
+        $where = [
+            "userid" => $trainid,
+        ];
+        $trainObj = $this -> where($where) -> select();
+        return $trainObj;
+    }
 }

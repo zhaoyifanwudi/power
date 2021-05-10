@@ -28,12 +28,12 @@ class Train extends AuthBase{
     }
     public function process(){
         $trainid = input('param.trainid','');
-        $stepid = input('param.stepid','');
+        $step = input('param.step','');
         $result = input('param.result','');
         $time = input('param.time','');
         $data = [
             'trainid' => $trainid,
-            'stepid' => $stepid,
+            'step' => $step,
             'result' => $result,
             'time' => $time
         ];
@@ -44,7 +44,7 @@ class Train extends AuthBase{
         }
         try{
             $processObj = new ProcessModel();
-            $res = $processObj -> creatProcess($trainid,$stepid,$result,$time);
+            $res = $processObj -> creatProcess($trainid,$step,$result,$time);
             if(!$res){
                 return show(config("status.error"),"此步骤失败");
             }

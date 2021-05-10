@@ -17,10 +17,10 @@ class Exam extends AuthBase{
         $userInfo = cache(config("redis.token_pre").$this -> accessToken);
         try{
             $examObj = new ExamModel();
-            $isres = $examObj -> findExamByUser($userInfo['id'],$classid);
-            if(!$isres){
-                return show(config("status.error"),"您已经参与过当前科目的考核");
-            }
+            // $isres = $examObj -> findExamByUser($userInfo['id'],$classid);
+            // if(!$isres){
+            //     return show(config("status.error"),"您已经参与过当前科目的考核");
+            // }
             $res = $examObj -> creatExam($userInfo['id'],$classid);
             if(!$res){
                 return show(config("status.error"),"开启考核失败");
@@ -32,12 +32,12 @@ class Exam extends AuthBase{
     }
     public function process(){
         $examid = input('param.examid','');
-        $questionid = input('param.questionid','');
+        $question = input('param.question','');
         $result = input('param.result','');
         $time = input('param.time','');
         $data = [
             'examid' => $examid,
-            'questionid' => $questionid,
+            'question' => $question,
             'result' => $result,
             'time' => $time
         ];
@@ -48,7 +48,7 @@ class Exam extends AuthBase{
         }
         try{
             $eproObj = new EproModel();
-            $res = $eproObj -> creatEpro($examid,$questionid,$result,$time);
+            $res = $eproObj -> creatEpro($examid,$question,$result,$time);
             if(!$res){
                 return show(config("status.error"),"此题目提交失败");
             }
@@ -59,10 +59,14 @@ class Exam extends AuthBase{
     }
     public function endExam(){
         $examid = input('param.examid','');
-        $score = input('param.score','');
+        $erroroptnum = input('param.erroroptnum','');
+        $totaltime = input('param.totaltime','');
+        // $score = input('param.score','');
         $data = [
             "examid" => $examid,
-            "score" => $score
+            // "score" => $score
+            "erroroptnum" => $erroroptnum,
+            "totaltime" => $totaltime
         ];
         try{
             validate(\app\api\validate\EndExam::class) -> check($data);
@@ -71,7 +75,7 @@ class Exam extends AuthBase{
         }
         try{
             $examObj = new ExamModel();
-            $res = $examObj -> updateExam($examid,$score);
+            $res = $examObj -> updateExam($examid,$erroroptnum,$totaltime);
             if(!$res){
                 return show(config("status.error"),"结束考核失败");
             }

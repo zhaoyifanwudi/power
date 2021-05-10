@@ -5,6 +5,9 @@
  */
 function show($status,$message = "error",$data = [],$httpStatus = 200)
 {
+    if(empty($data)){
+        $data = new \ArrayObject();
+    }
     $result = [
         "status" => $status,
         "message" => $message,

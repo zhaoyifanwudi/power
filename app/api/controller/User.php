@@ -10,6 +10,7 @@ class User extends BaseController{
         if(!$this -> request -> isPost()){
             return show(config("status.error"),"请求方式错误");
         }
+        
         $username = input('param.username','','trim');
         $password = input('param.password','','trim');
         $data = [
