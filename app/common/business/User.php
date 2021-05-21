@@ -29,7 +29,7 @@ class User{
             $user = $user -> toArray();
             if($user['password'] != md5($data['password']."_power")){
                 // throw new Exception("密码错误");
-                return show(config("status.error"),"密码错误");
+                return show(config("status.pass_error"),"密码错误");
             }
             $updateData = [
                 "utime" => time(),

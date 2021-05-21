@@ -8,5 +8,7 @@ Route::rule("vrtrain","VrTrain/vrtrain","GET");
 Route::rule("vrtrainList","VrTrain/vrtrainList","GET");
 Route::rule("vrexam","VrExam/vrexam","GET");
 Route::rule("vrExamList","VrExam/vrexamList","GET");
+Route::rule("artrain","ArTrain/artrain","GET");
+Route::rule("arexam","ArExam/arexam","GET");
 Route::rule("logout","Logout/index","GET");
 Route::rule("loginCheck","Login/check","POST");
