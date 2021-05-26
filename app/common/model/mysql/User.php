@@ -2,6 +2,7 @@
 namespace app\common\model\mysql;
 use think\Model;
 class User extends Model{
+    // protected $connection = 'moodle';
     /**
      * 查询用户
      */
@@ -19,6 +20,9 @@ class User extends Model{
      * 创建用户
      */
     public function createUser($username,$password){
+        if(empty($username) || empty($password)){
+            return 0;
+        }
         $this -> username = $username;
         $this -> password = md5($password."_power");
         $this -> utime = time();

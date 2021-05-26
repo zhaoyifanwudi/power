@@ -95,7 +95,7 @@ class Exam extends Model{
         $eproObj = $this -> epro() -> where($where) -> select();
         return $eproObj;
     }
-    public function queryExams($examid){
+    public function queryExams($examid,$pageid){
         $examid = intval($examid);
         if(empty($examid)){
             return false;
@@ -103,7 +103,11 @@ class Exam extends Model{
         $where = [
             "userid" => $examid,
         ];
-        $examObj = $this -> where($where) -> select();
+        if($pageid == 1){
+            $examObj = $this -> where($where)  -> where('classid','<=',3) -> select();
+        } else if($pageid == 0) {
+            $examObj = $this -> where($where)  -> where('classid','>',3) -> select();
+        }
         return $examObj;
     }
 }

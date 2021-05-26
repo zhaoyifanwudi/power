@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../static/admin/css/reset.css">
     <link rel="stylesheet" href="../../static/admin/css/login.css">
+    <link rel="stylesheet" href="../../static/admin/css/iconfont/iconfont.css">
     <title>登录</title>
 </head>
 <body>
@@ -23,22 +24,38 @@
                 </div>
                 <div class="login-form">
                     <h3>
-                        <span class="checked">账号登录</span>
+                        <span class="spans checked">账号登录</span>
                         <span class="line">|</span>
-                        <span>启动程序</span>
+                        <span class="spans">账号注册</span>
                     </h3>
-                    <div class="input">
-                        <input type="text" class="username" placeholder="请输入账号">
+                    <div class="form on">
+                        <div class="input">
+                            <input type="text" class="username" placeholder="请输入账号">
+                        </div>
+                        <div class="input">
+                            <input type="password" class="password" placeholder="请输入密码">
+                        </div>
+                        <div class="btn-box">
+                            <a href="javascript:;" class="btn" id="login" onclick="login()">登录</a>
+                        </div>
                     </div>
-                    <div class="input">
-                        <input type="password" class="password" placeholder="请输入密码">
+                    <div class="form">
+                        <div class="input">
+                            <input type="text" class="usernameA" placeholder="请输入账号">
+                        </div>
+                        <div class="input">
+                            <input type="password" class="passwordA vis" placeholder="请输入密码">
+                            <i class="icon iconfont icon-xiaoyanjing-zheng icon-dis" onclick="pason()"></i>
+                        </div>
+                        <div class="btn-box">
+                            <a href="javascript:;" class="btn" id="login" onclick="register()">注册</a>
+                        </div>
                     </div>
-                    <div class="btn-box">
-                        <a href="javascript:;" class="btn" id="login" onclick="login()">登录</a>
-                    </div>
+                    
                 </div>
             </div>
         </div>
+        
     </div>
 <script src="../../static/admin/lib/jquery/dist/jquery.min.js"></script>
 <script src="../../static/admin/js/login.js"></script>

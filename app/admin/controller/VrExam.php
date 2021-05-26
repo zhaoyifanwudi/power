@@ -13,10 +13,11 @@ class VrExam extends AdminBase{
         return $gets['id'];
     }
     public function vrexamList(){
+        $pageid = 1;
         $examObj = new TrainModel();
         $clasObj = new ClassesModel();
         $temp = $this -> getSession();
-        $eproRes = $examObj -> queryTrains($temp);
+        $eproRes = $examObj -> queryTrains($temp,$pageid);
         foreach($eproRes as $k => $v){
             $v -> authorityId = 1;
             $v -> parentId = -1;

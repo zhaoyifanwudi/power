@@ -13,10 +13,11 @@ class VrTrain extends AdminBase{
         return $gets['id'];
     }
     public function vrtrainList(){
+        $pageid = 1;
         $ExamObj = new ExamModel();
         $clasObj = new ClassesModel();
         $temp = $this -> getSession();
-        $eproRes = $ExamObj -> queryExams($temp);
+        $eproRes = $ExamObj -> queryExams($temp,$pageid);
         foreach($eproRes as $k => $v){
             $v -> authorityId = 1;
             $v -> parentId = -1;

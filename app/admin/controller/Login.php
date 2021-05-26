@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use think\facade\View;
 use app\BaseController;
 use app\common\model\mysql\User as UserModel;
+use app\common\lib\Str;
 class Login extends AdminBase{
     public function initialize(){
         // parent::initialize();
@@ -31,7 +32,7 @@ class Login extends AdminBase{
             $user = $userObj -> getUsername($username);
             
             if(empty($user)){
-               
+                return show(config("status.error"),"用户不存在");
             }
             if($user -> status != config("status.mysql.table_normal")){
                 return show(config("status.error"),"账号存在异常");
@@ -53,7 +54,48 @@ class Login extends AdminBase{
         } catch(\Exception $e){
             return show(config("status.error"),"内部异常,登陆失败");
         }
+        $token = Str::getLoginToken($username);
+        $redisData = [
+            "id" => $userId,
+            "username" => $username, 
+        ];
+        $res = cache($token,$redisData);
         session(config("admin.session_user"),$user);
+        session(config("admin.token_user"),$token);
         return show(config("status.success"),"登陆成功");
+    }
+    public function register(){
+        if(!$this -> request -> isPost()){
+            return show(config("status.error"),"请求方式错误");
+        }
+        $username = $this -> request -> param("username","","trim");
+        $password = $this -> request -> param("password","","trim");
+        if(empty($username) || empty($password)){
+            return show(config("status.error"),"用户名或者密码为空");
+        }
+        try{
+            $userObj = new UserModel();
+            if($userObj -> getUsername($username)){
+                return show(config("status.error"),"该用户名已存在");
+            }
+            $user = $userObj -> createUser($username,$password);
+        } catch(\Exception $e){
+            return show(config("status.error"),"内部异常,登陆失败");
+        }
+        try{
+            $userInfo = $userObj -> getUsername($username);
+            $userInfo = $userInfo -> toArray();
+        } catch(\Exception $e){
+            return show(config("status.error"),"内部异常,登陆失败");
+        }
+        $token = Str::getLoginToken($username);
+        $redisData = [
+            "id" => $user,
+            "username" => $username, 
+        ];
+        $res = cache(config("redis.token_pre").$token,$redisData);
+        session(config("admin.session_user"),$userInfo);
+        session(config("admin.token_user"),$token);
+        return show(config("status.success"),"注册成功");
     }
 }

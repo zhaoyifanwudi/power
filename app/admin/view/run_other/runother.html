@@ -27,10 +27,11 @@
 </div>
 
 <!-- 操作列 -->
-<!-- <script type="text/html" id="auth-state">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script> -->
+<script type="text/html" id="auth-state">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="stop">停止</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="start">启动</a>
+</script>
+
 <script src="../../static/admin/lib/jquery/dist/jquery.min.js"></script>
 <script src="../../static/adindex/lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
 <script src="../../static/adindex/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
@@ -56,15 +57,13 @@
             elem: '#munu-table',
             // data: i,
             // data:[{"classid":1,"stime":1,"time":1619592711,"pass":0,"erroroptnum":59,"authorityId":1,"parentId":-1,"menuIcon":"layui-icon-set"},{"classid":2,"stime":1619589461,"time":0,"pass":0,"erroroptnum":0,"authorityId":1,"parentId":-1,"menuIcon":"layui-icon-set"}],
-            url: 'artrainList',
+            url: 'getall',
             page: false,
             cols: [[
                 {type: 'numbers'},
-                {field: 'classid', minWidth: 200, title: '考核科目名称'},
-                {field: 'stime', title: '开始时间', align: 'center'},
-                {field: 'etime', align: 'center', title: '结束时间'},
-                {field: 'time', title: '考核用时', align: 'center'},
-                {field: 'pass', width: 120, align: 'center', title: '是否通过'}
+                {field: 'ip', minWidth: 200, title: '设备IP'},
+                {templet: '#auth-state', width: 120, align: 'center', title: '操作'}
+                
             ]],
             done: function () {
                 layer.closeAll('loading');
@@ -79,17 +78,41 @@
             treetable.foldAll('#munu-table');
         });
 
-        // //监听工具条
-        // table.on('tool(munu-table)', function (obj) {
-        //     var data = obj.data;
-        //     var layEvent = obj.event;
+        //监听工具条
+        table.on('tool(munu-table)', function (obj) {
+            var dataa = obj.data;
+            var layEvent = obj.event;
 
-        //     if (layEvent === 'del') {
-        //         layer.msg('删除' + data.id);
-        //     } else if (layEvent === 'edit') {
-        //         layer.msg('修改' + data.id);
-        //     }
-        // });
+            if (layEvent === 'start') {
+                
+                // let username = session(config("admin.session_user"));
+                
+                $.post("checkip",{
+                    ip:dataa.ip
+                },(data,status) => {
+                    if(data.status == 1){
+                        layer.msg('启动设备' + dataa.ip);
+                        let ws = new WebSocket("ws://" + dataa.ip + ":2345");
+                        // console.log(data.token);
+                        let temp = {
+                            'username':dataa.username,
+                            'token':dataa.token
+                        };
+                        ws.onopen = function(){
+                        　　//当WebSocket创建成功时，触发onopen事件
+                            temp = JSON.stringify(temp);
+                        　　ws.send(temp); //将消息发送到服务端
+                        }
+                    } else {
+                        layer.msg('已被占用' + dataa.ip);
+                        return false;
+                    }
+                });
+                
+            } else if (layEvent === 'stop') {
+                layer.msg('关闭设备' + dataa.ip);
+            }
+        });
     });
 </script>
 </body>

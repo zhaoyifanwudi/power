@@ -12,11 +12,12 @@ class ArTrain extends AdminBase{
         $gets = session(config("admin.session_user"));
         return $gets['id'];
     }
-    public function vrexamList(){
+    public function artrainList(){
+        $pageid = 0;
         $examObj = new TrainModel();
         $clasObj = new ClassesModel();
         $temp = $this -> getSession();
-        $eproRes = $examObj -> queryTrains($temp);
+        $eproRes = $examObj -> queryTrains($temp,$pageid);
         foreach($eproRes as $k => $v){
             $v -> authorityId = 1;
             $v -> parentId = -1;

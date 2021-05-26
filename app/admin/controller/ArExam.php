@@ -12,11 +12,12 @@ class ArExam extends AdminBase{
         $gets = session(config("admin.session_user"));
         return $gets['id'];
     }
-    public function vrtrainList(){
+    public function arexamList(){
+        $pageid = 0;
         $ExamObj = new ExamModel();
         $clasObj = new ClassesModel();
         $temp = $this -> getSession();
-        $eproRes = $ExamObj -> queryExams($temp);
+        $eproRes = $ExamObj -> queryExams($temp,$pageid);
         foreach($eproRes as $k => $v){
             $v -> authorityId = 1;
             $v -> parentId = -1;

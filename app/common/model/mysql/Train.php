@@ -64,7 +64,7 @@ class Train extends Model{
         $processObj = $this -> process() -> where($where) -> select();
         return $processObj;
     }
-    public function queryTrains($trainid){
+    public function queryTrains($trainid,$pageid){
         $trainid = intval($trainid);
         if(empty($trainid)){
             return false;
@@ -72,7 +72,11 @@ class Train extends Model{
         $where = [
             "userid" => $trainid,
         ];
-        $trainObj = $this -> where($where) -> select();
+        if($pageid == 1){
+            $trainObj = $this -> where($where)  -> where('classid','<=',3) -> select();
+        } else if($pageid == 0) {
+            $trainObj = $this -> where($where)  -> where('classid','>',3) -> select();
+        }
         return $trainObj;
     }
 }
