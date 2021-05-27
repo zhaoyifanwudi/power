@@ -2,7 +2,9 @@
 namespace app\admin\controller;
 
 use think\facade\View;
+use app\admin\controller\Worker;
 use app\common\model\mysql\Ip as IpModel;
+use app\common\model\mysql\Userip as UseripModel;
 class RunOther extends AdminBase{
     public function runother(){
         return View::fetch();
@@ -34,14 +36,33 @@ class RunOther extends AdminBase{
         $ipObj = new IpModel();
         $res = $ipObj -> checkIp($ip);
         if($res){
-            show(config("status.error"),"ip已经被占用");
+            return show(config("status.error"),"ip已经被占用");
         } else {
             $temp = $ipObj -> updateIp($ip);
             if($temp){
-                show(config("status.success"),"启动成功");
+                session(config("admin.ip_user"),$ip);
+                $token = session(config("admin.token_user"));
+                $name = session(config("admin.session_user"));
+                $username = $name['username'];
+                // $temp = [
+                //     'ip' => $ip,
+                //     'username' => $username,
+                //     'token' => $token
+                // ];
+                // $ress = cache("worker",$temp);
+                $useripObj = new UseripModel();
+                $useridRes = $useripObj -> updateIp($username,$ip);
+                // $worker = new Worker();
+                // $tepp = $worker -> onMessage();
+                return show(config("status.success"),"启动成功");
             } else {
-                show(config("status.error"),"启动失败");
+                return show(config("status.error"),"启动失败");
             }
         }
+    }
+    public function md(){
+        $userip = new UseripModel();
+        $useripRes = $userip -> finduserIp();
+        dump($useripRes);
     }
 }

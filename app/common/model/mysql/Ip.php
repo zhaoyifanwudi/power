@@ -10,7 +10,11 @@ class Ip extends Model{
         $this -> status = 1;
         $this -> time = time();
         $ipObj = $this -> save();
-        return $ipObj;
+        if($ipObj){
+            return $this -> id;
+        } else {
+            return 0;
+        }
     }
     public function findIp($ip){
         if(empty($ip)){
@@ -49,6 +53,18 @@ class Ip extends Model{
         ];
         $data = [
             "status" => 0,
+        ];
+        return $this -> where($where) -> save($data);
+    }
+    public function recoverIp($ip){
+        if(empty($ip)){
+            return false;
+        }
+        $where = [
+            "ip" => $ip,
+        ];
+        $data = [
+            "status" => 1,
         ];
         return $this -> where($where) -> save($data);
     }

@@ -92,18 +92,20 @@
                 },(data,status) => {
                     if(data.status == 1){
                         layer.msg('启动设备' + dataa.ip);
-                        let ws = new WebSocket("ws://" + dataa.ip + ":2345");
-                        // console.log(data.token);
-                        let temp = {
-                            'username':dataa.username,
-                            'token':dataa.token
-                        };
-                        ws.onopen = function(){
-                        　　//当WebSocket创建成功时，触发onopen事件
-                            temp = JSON.stringify(temp);
-                        　　ws.send(temp); //将消息发送到服务端
-                        }
+                        console.log(data);
+                        // let ws = new WebSocket("ws://" + dataa.ip + ":2345");
+                        // // console.log(data.token);
+                        // let temp = {
+                        //     'username':dataa.username,
+                        //     'token':dataa.token
+                        // };
+                        // ws.onopen = function(){
+                        // 　　//当WebSocket创建成功时，触发onopen事件
+                        //     temp = JSON.stringify(temp);
+                        // 　　ws.send(temp); //将消息发送到服务端
+                        // }
                     } else {
+                        // console.log(data);
                         layer.msg('已被占用' + dataa.ip);
                         return false;
                     }

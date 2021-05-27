@@ -5,6 +5,7 @@ use think\facade\View;
 use app\BaseController;
 use app\common\model\mysql\User as UserModel;
 use app\common\lib\Str;
+use app\common\model\mysql\Userip as UseripModel;
 class Login extends AdminBase{
     public function initialize(){
         // parent::initialize();
@@ -59,9 +60,15 @@ class Login extends AdminBase{
             "id" => $userId,
             "username" => $username, 
         ];
-        $res = cache($token,$redisData);
+        $res = cache(config("redis.token_pre").$token,$redisData);
         session(config("admin.session_user"),$user);
         session(config("admin.token_user"),$token);
+        try{
+            $userip = new UseripModel();
+            $useripRes = $userip -> createIp($username,$token);
+        } catch(\Exception $e){
+            return show(config("status.error"),"内部异常,登陆失败");
+        }
         return show(config("status.success"),"登陆成功");
     }
     public function register(){
@@ -96,6 +103,12 @@ class Login extends AdminBase{
         $res = cache(config("redis.token_pre").$token,$redisData);
         session(config("admin.session_user"),$userInfo);
         session(config("admin.token_user"),$token);
+        try{
+            $userip = new UseripModel();
+            $useripRes = $userip -> createIp($username,$token);
+        } catch(\Exception $e){
+            return show(config("status.error"),"内部异常,登陆失败");
+        }
         return show(config("status.success"),"注册成功");
     }
 }
