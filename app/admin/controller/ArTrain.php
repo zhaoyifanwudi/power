@@ -18,6 +18,7 @@ class ArTrain extends AdminBase{
         $clasObj = new ClassesModel();
         $temp = $this -> getSession();
         $eproRes = $examObj -> queryTrains($temp,$pageid);
+        // dump($eproRes);
         foreach($eproRes as $k => $v){
             $v -> authorityId = 1;
             $v -> parentId = -1;

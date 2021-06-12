@@ -10,4 +10,14 @@ class Epro extends Model{
         $result = $this -> save();
         return $result;
     }
+    public function findByid($examid){
+        if(empty($examid)){
+            return false;
+        }
+        $where = [
+            "examid" => $examid,
+        ];
+        $res = $this -> where($where) -> select();
+        return $res;
+    }
 }

@@ -19,4 +19,4 @@ Route::rule("checkip","RunOther/checkIp","POST");
 Route::rule("loginCheck","Login/check","POST");
 Route::rule("register","Login/register","POST");
 // Route::rule("md","RunOther/md","GET");
-Route::rule("md","RunOther/md","GET");
+Route::rule("md","VrTrain/md","GET");
